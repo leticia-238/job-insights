@@ -123,12 +123,16 @@ def get_min_salary(path):
     return min_salary
 
 
-def validate_job_keys(job, *keys):
-    for key in keys:
-        if key not in job:
-            raise ValueError
-        elif not isinstance(job[key], int):
-            raise ValueError
+def validate_integer(value):
+    if not isinstance(value, int):
+        raise ValueError
+
+
+def validate_job_keys(job):
+    if not ("min_salary" in job and "max_salary" in job):
+        raise ValueError
+    validate_integer(job["max_salary"])
+    validate_integer(job["min_salary"])
 
 
 def matches_salary_range(job, salary):
@@ -154,7 +158,8 @@ def matches_salary_range(job, salary):
         If `job["min_salary"]` is greather than `job["max_salary"]`
         If `salary` isn't a valid integer
     """
-    validate_job_keys(job, "min_salary", "max_salary")
+    validate_job_keys(job)
+    validate_integer(salary)
     if job["min_salary"] > job["max_salary"]:
         raise ValueError
     is_in_range = job["min_salary"] <= salary <= job["max_salary"]
